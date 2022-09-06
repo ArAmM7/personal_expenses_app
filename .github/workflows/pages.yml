@@ -13,4 +13,4 @@ jobs:
       - uses: subosito/flutter-action@v1
       - uses: bluefireteam/flutter-gh-pages@v7
         with:
-          baseHref: /quiz_app/
+          baseHref: /personal_expenses_app/
