@@ -1,7 +1,7 @@
 import '../models/transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:auto_size_text/auto_size_text.dart';
+
 
 class TransactionList extends StatelessWidget {
   const TransactionList({
@@ -13,50 +13,69 @@ class TransactionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 450,
-      child: ListView(
-        children: [
-          ...transactions.map((tx) {
-            return Card(
-              elevation: 1,
-              child: Row(
-                children: [
-                  Container(
-                    width: 100,
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                    padding: const EdgeInsets.all(5),
-                    // decoration: BoxDecoration(
-                    //     border: Border.all(width: 1, color: Colors.greenAccent),
-                    //     color: Colors.white60),
-                    child: AutoSizeText(
-                      maxLines: 1,
-                      '\$ ${tx.amount}',
-                      style: const TextStyle(fontSize: 24, color: Colors.green),
-                    ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+    return SizedBox(
+      height: 540,
+      child: transactions.isEmpty
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('No transactions added yet',
+                    style: Theme.of(context).textTheme.titleLarge),
+                const SizedBox(
+                  height: 40,
+                ),
+                SizedBox(
+                    height: 160,
+                    child: Image.asset(
+                      'assets/images/waiting.png',
+                      fit: BoxFit.cover,
+                      isAntiAlias: true,
+                    )),
+              ],
+            )
+          : ListView.builder(
+              itemBuilder: (ctx, index) {
+                return Card(
+                  elevation: 2,
+                  child: Row(
                     children: [
-                      AutoSizeText(
-                        tx.title,
-                        style:
-                            const TextStyle(fontSize: 18, color: Colors.black54),
+                      Container(
+                        width: 100,
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 15),
+                        padding: const EdgeInsets.all(5),
+                        // decoration: BoxDecoration(
+                        //     border: Border.all(width: 1, color: Colors.greenAccent),
+                        //     color: Colors.white60),
+                        child: FittedBox(
+                          child: Text(
+                            '\$ ${transactions[index].amount.toStringAsFixed(2)}',
+                            style: TextStyle(
+                                fontSize: 24,
+                                color: Theme.of(context).primaryColor),
+                          ),
+                        ),
                       ),
-                      AutoSizeText(
-                        DateFormat('HH:MM - dd/MMM/yyyy').format(tx.date),
-                        style:
-                            const TextStyle(fontSize: 14, color: Colors.black26),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            transactions[index].title,
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
+                          Text(
+                            DateFormat('HH:MM - dd/MMM/yyyy')
+                                .format(transactions[index].date),
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          )
+                        ],
                       )
                     ],
-                  )
-                ],
-              ),
-            );
-          }).toList(),
-        ],
-      ),
+                  ),
+                );
+              },
+              itemCount: transactions.length,
+            ),
     );
   }
 }
