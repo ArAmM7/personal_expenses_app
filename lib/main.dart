@@ -59,6 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Transaction> transactions = [];
 
   final List<Transaction> _userTransactions = [
+    //    dummy data
     // Transaction(
     //     id: 't1', title: 'New Shoes', amount: 69.99, date: DateTime.now()),
     // Transaction(
@@ -75,18 +76,6 @@ class _MyHomePageState extends State<MyHomePage> {
     // ),
   ];
 
-  void _addNewTransaction(String title, double amount) {
-    final newTX = Transaction(
-        title: title,
-        amount: amount,
-        date: DateTime.now(),
-        id: DateTime.now().toString());
-
-    setState(() {
-      _userTransactions.add(newTX);
-    });
-  }
-
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
@@ -97,19 +86,20 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
           title: const Text('Personal Expenses'),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Container(
-                    alignment: Alignment.center,
-                    height: 160,
-                    width: double.infinity,
-                    child: Chart(_recentTransactions.toList())),
-                TransactionList(transactions: _userTransactions),
-              ]),
-        ),
+        body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Container(
+                  alignment: Alignment.center,
+                  height: 160,
+                  width: double.infinity,
+                  child: Chart(_recentTransactions.toList())),
+              Expanded(
+                child: TransactionList(
+                    transactions: _userTransactions,
+                    deleteTX: _deleteTransaction),
+              ),
+            ]),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton(
           onPressed: () => {_startAddNewTransaction(context)},
@@ -129,5 +119,22 @@ class _MyHomePageState extends State<MyHomePage> {
         return NewTransaction(_addNewTransaction);
       },
     );
+  }
+
+  void _addNewTransaction(String title, double amount, DateTime date) {
+    final newTX = Transaction(
+        title: title,
+        amount: amount,
+        date: date,
+        id: DateTime.now().toString());
+
+    setState(() {
+      _userTransactions.add(newTX);
+    });
+  }
+
+  void _deleteTransaction(String id) {
+    setState(
+        () => _userTransactions.removeWhere((element) => element.id == id));
   }
 }

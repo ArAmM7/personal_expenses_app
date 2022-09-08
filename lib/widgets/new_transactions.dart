@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:intl/intl.dart';
 
 class NewTransaction extends StatefulWidget {
   final Function addTX;
@@ -11,9 +11,11 @@ class NewTransaction extends StatefulWidget {
 }
 
 class _NewTransactionState extends State<NewTransaction> {
-  final titleController = TextEditingController();
+  final _titleController = TextEditingController();
 
-  final amountController = TextEditingController();
+  final _amountController = TextEditingController();
+
+  DateTime _selectedDate = DateTime(0);
 
   @override
   Widget build(BuildContext context) {
@@ -25,38 +27,71 @@ class _NewTransactionState extends State<NewTransaction> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               TextField(
-                controller: titleController,
+                controller: _titleController,
                 enableSuggestions: true,
                 keyboardType: TextInputType.text,
                 decoration: const InputDecoration(labelText: 'Title'),
-                onSubmitted: (_) => submitData(),
+                onSubmitted: (_) => _submitData(),
               ),
               TextField(
-                controller: amountController,
+                controller: _amountController,
 
                 //onChanged: (value) => {amountInput = value},
                 keyboardType: const TextInputType.numberWithOptions(
                     signed: false, decimal: true),
                 decoration: const InputDecoration(labelText: 'Amount'),
-                onSubmitted: (_) => submitData(),
+                onSubmitted: (_) => _submitData(),
+              ),
+              Container(
+                padding: const EdgeInsets.all(2),
+                height: 80,
+                child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                          child: Text(_selectedDate == DateTime(0)
+                              ? 'No date chosen'
+                              : 'Picked Date ${DateFormat('dd/MMM/yyyy').format(_selectedDate)}')),
+                      TextButton(
+                          onPressed: _presentDatePicker,
+                          child: const Text(
+                            'Choose date',
+                          )),
+                    ]),
               ),
               ElevatedButton(
-                  onPressed: () => submitData(),
-                  child: const AutoSizeText('add transaction')),
+                  onPressed: () => _submitData(),
+                  child: const Text('add transaction')),
             ],
           ),
         ));
   }
 
-  void submitData() {
-    final enteredTitle = titleController.text;
-    final enteredAmount = double.parse(amountController.text);
-    if (enteredTitle.isEmpty || enteredAmount <= 0) {
+  void _presentDatePicker() {
+    showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2010),
+            lastDate: DateTime.now())
+        .then((value) {
+      setState(() {
+        _selectedDate = value!;
+      });
+    });
+  }
+
+  void _submitData() {
+    final enteredTitle = _titleController.text;
+    final enteredAmount = double.parse(_amountController.text);
+    if (enteredTitle.isEmpty ||
+        enteredAmount <= 0 ||
+        _selectedDate == DateTime(0)) {
       return;
     }
-    widget.addTX(enteredTitle, enteredAmount);
+    widget.addTX(enteredTitle, enteredAmount, _selectedDate);
     // titleController.clear();
     // amountController.clear();
+    //_selectedDate = DateTime(0);
     Navigator.of(context).pop();
   }
 }
