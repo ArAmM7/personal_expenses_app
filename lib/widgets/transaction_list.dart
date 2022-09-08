@@ -15,23 +15,25 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return transactions.isEmpty
-        ? Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('No transactions added yet',
-                  style: Theme.of(context).textTheme.titleLarge),
-              const SizedBox(
-                height: 40,
-              ),
-              SizedBox(
-                  height: 160,
-                  child: Image.asset(
-                    'assets/images/waiting.png',
-                    fit: BoxFit.cover,
-                    isAntiAlias: true,
-                  )),
-            ],
-          )
+        ? LayoutBuilder(builder: (context, constraints) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('No transactions added yet',
+                    style: Theme.of(context).textTheme.titleLarge),
+                const SizedBox(
+                  height: 40,
+                ),
+                SizedBox(
+                    height: constraints.maxHeight * 0.6,
+                    child: Image.asset(
+                      'assets/images/waiting.png',
+                      fit: BoxFit.cover,
+                      isAntiAlias: true,
+                    )),
+              ],
+            );
+          })
         : ListView.builder(
             itemBuilder: (ctx, index) {
               //    regular text
@@ -113,10 +115,11 @@ class TransactionList extends StatelessWidget {
               //text on circle avatar
               return Card(
                 elevation: 4,
-                margin:
-                    const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
                 child: ListTile(
                   leading: CircleAvatar(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
                     radius: 36,
                     child: FittedBox(
                       child: Text(
@@ -129,15 +132,24 @@ class TransactionList extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   subtitle: Text(
-                    DateFormat('HH:MM - dd/MMM/yyyy')
-                        .format(transactions[index].date),
+                    DateFormat('dd/MMM/yyyy').format(transactions[index].date),
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete_rounded),
-                    color: Theme.of(context).errorColor,
-                    onPressed: () => deleteTX(transactions[index].id),
-                  ),
+                  trailing: MediaQuery.of(context).size.width > 420
+                      ? ElevatedButton.icon(
+                          onPressed: () => deleteTX(transactions[index].id),
+                          icon: const Icon(Icons.delete_rounded),
+                          label: const Text('Delete transaction'),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStatePropertyAll(
+                                Theme.of(context).colorScheme.error),
+                          ),
+                        )
+                      : IconButton(
+                          icon: const Icon(Icons.delete_rounded),
+                          color: Theme.of(context).colorScheme.error,
+                          onPressed: () => deleteTX(transactions[index].id),
+                        ),
                 ),
               );
             },
