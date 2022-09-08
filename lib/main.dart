@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:personal_expenses_app/models/transaction.dart';
 import 'package:personal_expenses_app/widgets/new_transactions.dart';
 import 'package:personal_expenses_app/widgets/transaction_list.dart';
 import 'package:personal_expenses_app/widgets/chart.dart';
 
 void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations(
+  //     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(const MyApp());
 }
 
@@ -60,52 +64,78 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final List<Transaction> _userTransactions = [
     //    dummy data
-    // Transaction(
-    //     id: 't1', title: 'New Shoes', amount: 69.99, date: DateTime.now()),
-    // Transaction(
-    //   id: 't2',
-    //   title: 'Weekly Groceries',
-    //   amount: 126.47,
-    //   date: DateTime.now(),
-    // ),
-    // Transaction(
-    //   id: 't2',
-    //   title: 'Rent',
-    //   amount: 450,
-    //   date: DateTime.now(),
-    // ),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'New Shoes',
+        amount: 69.99,
+        date: DateTime.now()),
+    Transaction(
+      id: DateTime.now().toString(),
+      title: 'Weekly Groceries',
+      amount: 126.47,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: DateTime.now().toString(),
+      title: 'Rent',
+      amount: 450,
+      date: DateTime.now(),
+    ),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'New Shoes',
+        amount: 69.99,
+        date: DateTime.now()),
+    Transaction(
+      id: DateTime.now().toString(),
+      title: 'Weekly Groceries',
+      amount: 126.47,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: DateTime.now().toString(),
+      title: 'Rent',
+      amount: 450,
+      date: DateTime.now(),
+    ),
   ];
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          actions: <Widget>[
-            IconButton(
-                onPressed: () => {_startAddNewTransaction(context)},
-                icon: const Icon(Icons.add)),
-          ],
-          title: const Text('Personal Expenses'),
-        ),
-        body: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Container(
-                  alignment: Alignment.center,
-                  height: 160,
-                  width: double.infinity,
-                  child: Chart(_recentTransactions.toList())),
-              Expanded(
-                child: TransactionList(
-                    transactions: _userTransactions,
-                    deleteTX: _deleteTransaction),
-              ),
-            ]),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => {_startAddNewTransaction(context)},
-          child: const Icon(Icons.add),
-        ),
-      );
+  Widget build(BuildContext context) {
+    final availableHeight = (MediaQuery.of(context).size.height -
+        AppBar().preferredSize.height -
+        MediaQuery.of(context).padding.top);
+    return Scaffold(
+      appBar: AppBar(
+        actions: <Widget>[
+          IconButton(
+              onPressed: () => {_startAddNewTransaction(context)},
+              icon: const Icon(Icons.add)),
+        ],
+        title: const Text('Personal Expenses'),
+      ),
+      body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Container(
+                height: availableHeight * 0.25,
+                alignment: Alignment.center,
+                width: double.infinity,
+                child: Chart(_recentTransactions.toList())),
+            SizedBox(
+              height: availableHeight * 0.75,
+              child: TransactionList(
+                  transactions: _userTransactions,
+                  deleteTX: _deleteTransaction),
+            ),
+          ]),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => {_startAddNewTransaction(context)},
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
 
   Iterable<Transaction> get _recentTransactions {
     return _userTransactions.where((element) =>

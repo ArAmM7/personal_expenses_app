@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class ChartBar extends StatelessWidget {
@@ -14,40 +13,47 @@ class ChartBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 20,
-          child: FittedBox(
-            child: Text(
-              '\$${spendingAmount.toStringAsFixed(0)}',
+    return LayoutBuilder(builder: (context, constraints) {
+      final availableHeight = constraints.biggest.height;
+      final availableWidth = constraints.biggest.width;
+      return Column(
+        children: [
+          SizedBox(
+            height: availableHeight * 0.12,
+            child: FittedBox(
+              child: Text('\$${spendingAmount.toStringAsFixed(0)}'),
             ),
           ),
-        ),
-        const SizedBox(
-          height: 4,
-        ),
-        SizedBox(
-            height: 96,
-            width: 10,
-            child: Stack(children: [
-              Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey, width: 1),
-                      color: const Color.fromRGBO(220, 220, 220, 1),
-                      borderRadius: BorderRadius.circular(10))),
-              FractionallySizedBox(
-                  heightFactor: spendingPctOfTotal,
-                  child: Container(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(10))))
-            ])),
-        const SizedBox(
-          height: 4,
-        ),
-        AutoSizeText(label),
-      ],
-    );
+          SizedBox(
+            height: availableHeight * 0.05,
+          ),
+          SizedBox(
+              height: availableHeight * 0.66,
+              width: availableWidth * 0.25,
+              child: Stack(children: [
+                Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey, width: 1),
+                        color: const Color.fromRGBO(220, 220, 220, 1),
+                        borderRadius: BorderRadius.circular(10))),
+                FractionallySizedBox(
+                    heightFactor: spendingPctOfTotal,
+                    child: Container(
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(10))))
+              ])),
+          SizedBox(
+            height: availableHeight * 0.05,
+          ),
+          SizedBox(
+            height: availableHeight * 0.12,
+            child: FittedBox(
+              child: Text(label),
+            ),
+          ),
+        ],
+      );
+    });
   }
 }
