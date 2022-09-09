@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class ChartBar extends StatelessWidget {
   final String label;
@@ -33,14 +33,14 @@ class ChartBar extends StatelessWidget {
               child: Stack(children: [
                 Container(
                     decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey, width: 1),
+                        border: Border.all(color: CupertinoColors.inactiveGray, width: 1),
                         color: const Color.fromRGBO(220, 220, 220, 1),
                         borderRadius: BorderRadius.circular(10))),
                 FractionallySizedBox(
                     heightFactor: spendingPctOfTotal,
                     child: Container(
                         decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary,
+                            color: CupertinoColors.activeBlue,
                             borderRadius: BorderRadius.circular(10))))
               ])),
           SizedBox(

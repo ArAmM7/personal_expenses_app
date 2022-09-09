@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:personal_expenses_app/models/transaction.dart';
 import 'package:intl/intl.dart';
 import 'package:personal_expenses_app/widgets/chart_bar.dart';
@@ -36,8 +36,7 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        elevation: 6,
+    return Container(
         margin: const EdgeInsets.all(6),
         child: Padding(
           padding: const EdgeInsets.all(2),

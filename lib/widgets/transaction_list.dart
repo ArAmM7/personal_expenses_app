@@ -38,6 +38,7 @@ class TransactionList extends StatelessWidget {
           })
         : SingleChildScrollView(
             child: CupertinoFormSection(
+              clipBehavior: Clip.antiAlias,
               children: transactions.map((e) {
                 return CupertinoFormRow(
                   prefix: Row(
@@ -49,7 +50,7 @@ class TransactionList extends StatelessWidget {
                         width: 80,
                         height: 40,
                         padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 6),
+                            vertical: 10, horizontal: 5),
                         child: FittedBox(
                           child: Text(
                             '\$${e.amount}',
@@ -67,8 +68,10 @@ class TransactionList extends StatelessWidget {
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(e.title),
-                              Text(DateFormat('dd/MMM/yyyy').format(e.date))
+                              SizedBox(width: MediaQuery.of(context).size.width*0.5,child: Text(e.title),),
+                              Text(
+                                DateFormat('dd/MMM/yyyy').format(e.date),
+                              )
                             ]),
                       ),
                       CupertinoButton(

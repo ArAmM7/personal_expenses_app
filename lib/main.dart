@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+
 import 'package:personal_expenses_app/models/transaction.dart';
 import 'package:personal_expenses_app/widgets/new_transaction.dart';
 import 'package:personal_expenses_app/widgets/transaction_list.dart';
@@ -23,6 +25,10 @@ class MyApp extends StatelessWidget {
           }
         },
         child: const CupertinoApp(
+          theme: CupertinoThemeData(brightness: Brightness.light),
+          localizationsDelegates: [
+            DefaultMaterialLocalizations.delegate,
+          ],
           title: 'Personal Expenses',
           home: MyHomePage(),
         ));
@@ -114,9 +120,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final appBar = CupertinoNavigationBar(
+      middle: const Text('Personal Expenses'),
+      trailing: GestureDetector(
+          onTap: () => {_startAddNewTransaction(context)},
+          child: const Icon(CupertinoIcons.add)),
+    );
+
     final mediaQuery = MediaQuery.of(context);
     final isLandscape = mediaQuery.orientation == Orientation.landscape;
-    final availableHeight = (mediaQuery.size.height - mediaQuery.padding.top);
+    final availableHeight = (mediaQuery.size.height -
+        mediaQuery.padding.top -
+        appBar.preferredSize.height);
     final transactionList = SizedBox(
       height: availableHeight * 0.75,
       child: TransactionList(
@@ -124,55 +139,51 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     final pageBody = SafeArea(
-      //TODO create stateful widget from this column
       child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            if (isLandscape)
-              SizedBox(
-                height: availableHeight * 0.15,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CupertinoSlidingSegmentedControl(
-                      groupValue: _showChart,
-                      onValueChanged: (value) {
-                        setState(() {
-                          _showChart = value!;
-                        });
-                      },
-                      children: const <bool, Widget>{
-                        false: Text("Chart"),
-                        true: Text("Transactions"),
-                      },
-                    ),
-                  ],
-                ),
+        children: <Widget>[
+          if (!isLandscape)
+            Container(
+                height: availableHeight * 0.25,
+                alignment: Alignment.center,
+                width: double.infinity,
+                child: Chart(_recentTransactions.toList())),
+          if (!isLandscape) transactionList,
+          if (isLandscape)
+            SizedBox(
+              height: availableHeight * 0.15,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CupertinoSlidingSegmentedControl(
+                    groupValue: _showChart,
+                    onValueChanged: (value) {
+                      setState(() {
+                        _showChart = value!;
+                      });
+                    },
+                    children: const <bool, Widget>{
+                      false: Text("Chart"),
+                      true: Text("Transactions"),
+                    },
+                  ),
+                ],
               ),
-            if (!isLandscape)
-              Container(
-                  height: availableHeight * 0.25,
-                  alignment: Alignment.center,
-                  width: double.infinity,
-                  child: Chart(_recentTransactions.toList())),
-            if (!isLandscape) transactionList,
-            if (isLandscape)
-              _showChart
-                  ? Container(
-                      height: availableHeight * 0.75,
-                      alignment: Alignment.center,
-                      width: double.infinity,
-                      child: Chart(_recentTransactions.toList()))
-                  : transactionList,
-          ]),
-    );
-
-    final appBar = CupertinoNavigationBar(
-      middle: const Text('Personal Expenses'),
-      trailing: GestureDetector(
-          onTap: () => {_startAddNewTransaction(context)},
-          child: const Icon(CupertinoIcons.add)),
+            ),
+          if (isLandscape)
+            _showChart
+                ? Container(
+                    height: availableHeight * 0.75,
+                    alignment: Alignment.center,
+                    width: double.infinity,
+                    child: transactionList)
+                : Container(
+                    height: availableHeight * 0.75,
+                    alignment: Alignment.center,
+                    width: double.infinity,
+                    child: Chart(_recentTransactions.toList()))
+        ],
+      ),
     );
 
     return CupertinoPageScaffold(
