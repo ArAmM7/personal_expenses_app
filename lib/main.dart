@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 import 'package:personal_expenses_app/models/transaction.dart';
 import 'package:personal_expenses_app/widgets/new_transaction.dart';
@@ -25,47 +22,30 @@ class MyApp extends StatelessWidget {
             currentFocus.unfocus();
           }
         },
-        child: Platform.isIOS
-            ? const CupertinoApp(
-                title: 'Personal Expenses',
-                home: MyHomePage(),
-                theme: CupertinoThemeData(
-                    brightness: Brightness.light,
-                    primaryColor: Colors.teal,
-                    primaryContrastingColor: Colors.white,
-                    scaffoldBackgroundColor: Colors.white70,
-                    barBackgroundColor: Colors.white60,
-                    textTheme: CupertinoTextThemeData(
-                        primaryColor: Colors.black87,
-                        textStyle: TextStyle(
-                            fontFamily: 'SF',
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold))),
-              )
-            : MaterialApp(
-                title: 'Personal Expenses',
-                theme: ThemeData(
-                    primarySwatch: Colors.teal,
-                    fontFamily: 'SF',
-                    appBarTheme: const AppBarTheme(
-                        titleTextStyle: TextStyle(
-                            fontFamily: 'SF',
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold)),
-                    colorScheme: const ColorScheme(
-                        brightness: Brightness.light,
-                        primary: Colors.teal,
-                        onPrimary: Colors.white,
-                        secondary: Color.fromRGBO(136, 0, 150, 1),
-                        onSecondary: Colors.white,
-                        error: Colors.redAccent,
-                        onError: Colors.white,
-                        background: Colors.white60,
-                        onBackground: Colors.black87,
-                        surface: Colors.white70,
-                        onSurface: Colors.black87)),
-                home: const MyHomePage(),
-              ));
+        child: MaterialApp(
+          title: 'Personal Expenses',
+          theme: ThemeData(
+              primarySwatch: Colors.teal,
+              fontFamily: 'SF',
+              appBarTheme: const AppBarTheme(
+                  titleTextStyle: TextStyle(
+                      fontFamily: 'SF',
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold)),
+              colorScheme: const ColorScheme(
+                  brightness: Brightness.light,
+                  primary: Colors.teal,
+                  onPrimary: Colors.white,
+                  secondary: Color.fromRGBO(136, 0, 150, 1),
+                  onSecondary: Colors.white,
+                  error: Colors.redAccent,
+                  onError: Colors.white,
+                  background: Colors.white60,
+                  onBackground: Colors.black87,
+                  surface: Colors.white70,
+                  onSurface: Colors.black87)),
+          home: const MyHomePage(),
+        ));
   }
 }
 
@@ -176,39 +156,24 @@ class _MyHomePageState extends State<MyHomePage> {
           ]),
     );
 
-    final appBar = Platform.isIOS
-        ? CupertinoNavigationBar(
-            middle: const Text('Personal Expenses'),
-            trailing: GestureDetector(
-                onTap: () => {_startAddNewTransaction(context)},
-                child: const Icon(CupertinoIcons.add)),
-          )
-        : AppBar(
-            actions: <Widget>[
-              IconButton(
-                  onPressed: () => {_startAddNewTransaction(context)},
-                  icon: const Icon(Icons.add)),
-            ],
-            title: const Text('Personal Expenses'),
-          );
+    final appBar = AppBar(
+      actions: <Widget>[
+        IconButton(
+            onPressed: () => {_startAddNewTransaction(context)},
+            icon: const Icon(Icons.add)),
+      ],
+      title: const Text('Personal Expenses'),
+    );
 
-    return Platform.isIOS
-        ? CupertinoPageScaffold(
-            navigationBar: (appBar as ObstructingPreferredSizeWidget),
-            child: pageBody,
-          )
-        : Scaffold(
-            resizeToAvoidBottomInset: true,
-            appBar: (appBar as PreferredSizeWidget),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerFloat,
-            floatingActionButton: Platform.isIOS
-                ? Container()
-                : FloatingActionButton(
-                    onPressed: () => {_startAddNewTransaction(context)},
-                    child: const Icon(Icons.add),
-                  ),
-            body: pageBody);
+    return Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: appBar,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => {_startAddNewTransaction(context)},
+          child: const Icon(Icons.add),
+        ),
+        body: pageBody);
   }
 
   Iterable<Transaction> get _recentTransactions {
