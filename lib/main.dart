@@ -30,7 +30,9 @@ class MyApp extends StatelessWidget {
             DefaultMaterialLocalizations.delegate,
           ],
           title: 'Personal Expenses',
-          home: MyHomePage(),
+          home: SelectionArea(
+            child: MyHomePage(),
+          ),
         ));
   }
 }
