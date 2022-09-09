@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:personal_expenses_app/models/transaction.dart';
 import 'package:personal_expenses_app/widgets/new_transaction.dart';
 import 'package:personal_expenses_app/widgets/transaction_list.dart';
@@ -17,34 +18,13 @@ class MyApp extends StatelessWidget {
     return GestureDetector(
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);
-
           if (!currentFocus.hasPrimaryFocus) {
             currentFocus.unfocus();
           }
         },
-        child: MaterialApp(
+        child: const CupertinoApp(
           title: 'Personal Expenses',
-          theme: ThemeData(
-              primarySwatch: Colors.teal,
-              fontFamily: 'SF',
-              appBarTheme: const AppBarTheme(
-                  titleTextStyle: TextStyle(
-                      fontFamily: 'SF',
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold)),
-              colorScheme: const ColorScheme(
-                  brightness: Brightness.light,
-                  primary: Colors.teal,
-                  onPrimary: Colors.white,
-                  secondary: Color.fromRGBO(136, 0, 150, 1),
-                  onSecondary: Colors.white,
-                  error: Colors.redAccent,
-                  onError: Colors.white,
-                  background: Colors.white60,
-                  onBackground: Colors.black87,
-                  surface: Colors.white70,
-                  onSurface: Colors.black87)),
-          home: const MyHomePage(),
+          home: MyHomePage(),
         ));
   }
 }
@@ -95,6 +75,40 @@ class _MyHomePageState extends State<MyHomePage> {
       amount: 120,
       date: DateTime.now(),
     ),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'New Shoes',
+        amount: 74.99,
+        date: DateTime.now()),
+    Transaction(
+      id: DateTime.now().toString(),
+      title: 'Groceries',
+      amount: 26.47,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: DateTime.now().toString(),
+      title: 'Rent',
+      amount: 450,
+      date: DateTime.now(),
+    ),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'New Pants',
+        amount: 69.99,
+        date: DateTime.now()),
+    Transaction(
+      id: DateTime.now().toString(),
+      title: 'Groceries',
+      amount: 16.58,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: DateTime.now().toString(),
+      title: 'Utilities',
+      amount: 120,
+      date: DateTime.now(),
+    ),
   ];
   bool _showChart = false;
 
@@ -102,9 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final isLandscape = mediaQuery.orientation == Orientation.landscape;
-    final availableHeight = (mediaQuery.size.height -
-        AppBar().preferredSize.height -
-        mediaQuery.padding.top);
+    final availableHeight = (mediaQuery.size.height - mediaQuery.padding.top);
     final transactionList = SizedBox(
       height: availableHeight * 0.75,
       child: TransactionList(
@@ -123,18 +135,18 @@ class _MyHomePageState extends State<MyHomePage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'Show chart',
-                      style: Theme.of(context).textTheme.titleMedium,
+                    CupertinoSlidingSegmentedControl(
+                      groupValue: _showChart,
+                      onValueChanged: (value) {
+                        setState(() {
+                          _showChart = value!;
+                        });
+                      },
+                      children: const <bool, Widget>{
+                        false: Text("Chart"),
+                        true: Text("Transactions"),
+                      },
                     ),
-                    Switch.adaptive(
-                        activeColor: Theme.of(context).colorScheme.secondary,
-                        value: _showChart,
-                        onChanged: (value) {
-                          setState(() {
-                            _showChart = value;
-                          });
-                        }),
                   ],
                 ),
               ),
@@ -156,24 +168,17 @@ class _MyHomePageState extends State<MyHomePage> {
           ]),
     );
 
-    final appBar = AppBar(
-      actions: <Widget>[
-        IconButton(
-            onPressed: () => {_startAddNewTransaction(context)},
-            icon: const Icon(Icons.add)),
-      ],
-      title: const Text('Personal Expenses'),
+    final appBar = CupertinoNavigationBar(
+      middle: const Text('Personal Expenses'),
+      trailing: GestureDetector(
+          onTap: () => {_startAddNewTransaction(context)},
+          child: const Icon(CupertinoIcons.add)),
     );
 
-    return Scaffold(
-        resizeToAvoidBottomInset: true,
-        appBar: appBar,
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => {_startAddNewTransaction(context)},
-          child: const Icon(Icons.add),
-        ),
-        body: pageBody);
+    return CupertinoPageScaffold(
+      navigationBar: appBar,
+      child: pageBody,
+    );
   }
 
   Iterable<Transaction> get _recentTransactions {
@@ -182,8 +187,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _startAddNewTransaction(BuildContext context) {
-    showModalBottomSheet(
-      isScrollControlled: true,
+    showBarModalBottomSheet(
       context: context,
       builder: (_) {
         return NewTransaction(_addNewTransaction);
