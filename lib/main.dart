@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
             textTheme: CupertinoTextThemeData(
               dateTimePickerTextStyle: TextStyle(fontFamily: 'SF', color: CupertinoColors.label),
               navTitleTextStyle:
-                  TextStyle(fontFamily: 'SF', color: CupertinoColors.label),
+                  TextStyle(fontFamily: 'SF', color: CupertinoColors.label, fontWeight: FontWeight.w600),
               textStyle:
                   TextStyle(fontFamily: 'SF', color: CupertinoColors.label),
             ),

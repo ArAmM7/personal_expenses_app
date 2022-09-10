@@ -40,79 +40,81 @@ class TransactionList extends StatelessWidget {
         : SelectionArea(
             child: SingleChildScrollView(
               controller: PrimaryScrollController.of(context),
-              child: CupertinoFormSection(
-                clipBehavior: Clip.antiAlias,
-                children: transactions.map((e) {
-                  return Dismissible(
-                    direction: DismissDirection.endToStart,
-                    background: Container(
-                      padding: const EdgeInsets.all(4),
-                      alignment: Alignment.centerRight,
-                      color: CupertinoColors.destructiveRed,
-                      child: SizedBox(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: const [
-                            Icon(CupertinoIcons.delete_solid,
-                                color: CupertinoColors.white),
-                            Text(
-                              'Delete',
-                              style: TextStyle(color: CupertinoColors.white),
-                            )
+              child: Scrollbar(
+                child: CupertinoFormSection(
+                  clipBehavior: Clip.antiAlias,
+                  children: transactions.map((e) {
+                    return Dismissible(
+                      direction: DismissDirection.endToStart,
+                      background: Container(
+                        padding: const EdgeInsets.all(4),
+                        alignment: Alignment.centerRight,
+                        color: CupertinoColors.destructiveRed,
+                        child: SizedBox(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: const [
+                              Icon(CupertinoIcons.delete_solid,
+                                  color: CupertinoColors.white),
+                              Text(
+                                'Delete',
+                                style: TextStyle(color: CupertinoColors.white),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      onDismissed: (dir) {
+                        if (dir == DismissDirection.endToStart) {
+                          deleteTX(e.id);
+                        }
+                      },
+                      key: Key(e.id),
+                      child: CupertinoFormRow(
+                        prefix: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 24, left: 0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.5,
+                                    child: Text(
+                                      e.title,
+                                      style: const TextStyle(
+                                          fontWeight:FontWeight.w600),
+                                    ),
+                                  ),
+                                  Text(
+                                    DateFormat('dd/MMM/yyyy').format(e.date),
+                                    style: const TextStyle(
+                                        color: CupertinoColors.inactiveGray),
+                                  )
+                                ],
+                              ),
+                            ),
                           ],
                         ),
-                      ),
-                    ),
-                    onDismissed: (dir) {
-                      if (dir == DismissDirection.endToStart) {
-                        deleteTX(e.id);
-                      }
-                    },
-                    key: Key(e.id),
-                    child: CupertinoFormRow(
-                      prefix: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 24, left: 0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.5,
-                                  child: Text(
-                                    e.title,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                Text(
-                                  DateFormat('dd/MMM/yyyy').format(e.date),
-                                  style: const TextStyle(
-                                      color: CupertinoColors.inactiveGray),
-                                )
-                              ],
+                        child: Container(
+                          alignment: Alignment.centerRight,
+                          width: 144,
+                          height: 40,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 12),
+                          child: FittedBox(
+                            child: Text(
+                              '\$${e.amount}',
+                              style: const TextStyle(fontWeight: FontWeight.w600),
                             ),
-                          ),
-                        ],
-                      ),
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        width: 144,
-                        height: 40,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 12),
-                        child: FittedBox(
-                          child: Text(
-                            '\$${e.amount}',
-                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                }).toList(),
+                    );
+                  }).toList(),
+                ),
               ),
             ),
           );
