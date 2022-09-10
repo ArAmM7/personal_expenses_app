@@ -80,10 +80,14 @@ class TransactionList extends StatelessWidget {
                                 SizedBox(
                                   width:
                                       MediaQuery.of(context).size.width * 0.5,
-                                  child: Text(e.title, style: const TextStyle(fontWeight: FontWeight.w500)),
+                                  child: Text(e.title,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w500)),
                                 ),
                                 Text(
-                                  DateFormat('dd/MMM/yyyy').format(e.date),style: const TextStyle(color: CupertinoColors.inactiveGray),
+                                  DateFormat('dd/MMM/yyyy').format(e.date),
+                                  style: const TextStyle(
+                                      color: CupertinoColors.inactiveGray),
                                 )
                               ],
                             ),

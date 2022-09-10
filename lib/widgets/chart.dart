@@ -41,20 +41,21 @@ class Chart extends StatelessWidget {
           margin: const EdgeInsets.all(6),
           child: Padding(
             padding: const EdgeInsets.all(2),
-            child:
-                Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              ...groupedTransactionValues.map((data) {
-                return Flexible(
-                  fit: FlexFit.tight,
-                  child: ChartBar(
-                      label: data['day'].toString(),
-                      spendingAmount: (data['amount'] as double),
-                      spendingPctOfTotal: totalSpending == 0
-                          ? 0.0
-                          : (data['amount'] as double) / totalSpending),
-                );
-              }).toList()
-            ]),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ...groupedTransactionValues.map((data) {
+                    return Flexible(
+                      fit: FlexFit.tight,
+                      child: ChartBar(
+                          label: data['day'].toString(),
+                          spendingAmount: (data['amount'] as double),
+                          spendingPctOfTotal: totalSpending == 0
+                              ? 0.0
+                              : (data['amount'] as double) / totalSpending),
+                    );
+                  }).toList()
+                ]),
           )),
     );
   }

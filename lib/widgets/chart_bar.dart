@@ -33,7 +33,8 @@ class ChartBar extends StatelessWidget {
               child: Stack(children: [
                 Container(
                     decoration: BoxDecoration(
-                        border: Border.all(color: CupertinoColors.inactiveGray, width: 1),
+                        border: Border.all(
+                            color: CupertinoColors.inactiveGray, width: 1),
                         color: const Color.fromRGBO(220, 220, 220, 1),
                         borderRadius: BorderRadius.circular(10))),
                 FractionallySizedBox(

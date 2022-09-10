@@ -41,7 +41,6 @@ class _NewTransactionState extends State<NewTransaction> {
             CupertinoTextField(
               controller: _amountController,
               padding: const EdgeInsets.all(12),
-
               prefix: const Text('   \$'),
               keyboardType: const TextInputType.numberWithOptions(
                   signed: false, decimal: true),
