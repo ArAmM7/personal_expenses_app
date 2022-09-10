@@ -39,6 +39,7 @@ class TransactionList extends StatelessWidget {
           })
         : SelectionArea(
             child: SingleChildScrollView(
+              controller: PrimaryScrollController.of(context),
               child: CupertinoFormSection(
                 clipBehavior: Clip.antiAlias,
                 children: transactions.map((e) {
@@ -80,9 +81,11 @@ class TransactionList extends StatelessWidget {
                                 SizedBox(
                                   width:
                                       MediaQuery.of(context).size.width * 0.5,
-                                  child: Text(e.title,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w500)),
+                                  child: Text(
+                                    e.title,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                                 Text(
                                   DateFormat('dd/MMM/yyyy').format(e.date),
@@ -103,6 +106,7 @@ class TransactionList extends StatelessWidget {
                         child: FittedBox(
                           child: Text(
                             '\$${e.amount}',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),

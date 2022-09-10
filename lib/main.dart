@@ -29,7 +29,11 @@ class MyApp extends StatelessWidget {
           theme: CupertinoThemeData(
             brightness: Brightness.light,
             textTheme: CupertinoTextThemeData(
-              textStyle: TextStyle(fontFamily: 'SF'),
+              dateTimePickerTextStyle: TextStyle(fontFamily: 'SF', color: CupertinoColors.label),
+              navTitleTextStyle:
+                  TextStyle(fontFamily: 'SF', color: CupertinoColors.label),
+              textStyle:
+                  TextStyle(fontFamily: 'SF', color: CupertinoColors.label),
             ),
           ),
           localizationsDelegates: [
@@ -53,74 +57,74 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final List<Transaction> _userTransactions = [
     //    dummy data
-    Transaction(
-        id: DateTime.now().toString(),
-        title: 'New Shoes',
-        amount: 74.99,
-        date: DateTime.now()),
-    Transaction(
-      id: DateTime.now().toString(),
-      title: 'Groceries',
-      amount: 26.47,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: DateTime.now().toString(),
-      title: 'Rent',
-      amount: 450,
-      date: DateTime.now(),
-    ),
-    Transaction(
-        id: DateTime.now().toString(),
-        title: 'New Pants',
-        amount: 69.99,
-        date: DateTime.now()),
-    Transaction(
-      id: DateTime.now().toString(),
-      title: 'Groceries',
-      amount: 16.58,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: DateTime.now().toString(),
-      title: 'Utilities',
-      amount: 120,
-      date: DateTime.now(),
-    ),
-    Transaction(
-        id: DateTime.now().toString(),
-        title: 'New Shoes',
-        amount: 74.99,
-        date: DateTime.now()),
-    Transaction(
-      id: DateTime.now().toString(),
-      title: 'Groceries',
-      amount: 26.47,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: DateTime.now().toString(),
-      title: 'Rent',
-      amount: 450,
-      date: DateTime.now(),
-    ),
-    Transaction(
-        id: DateTime.now().toString(),
-        title: 'New Pants',
-        amount: 69.99,
-        date: DateTime.now()),
-    Transaction(
-      id: DateTime.now().toString(),
-      title: 'Groceries',
-      amount: 16.58,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: DateTime.now().toString(),
-      title: 'Utilities',
-      amount: 120,
-      date: DateTime.now(),
-    ),
+    // Transaction(
+    //     id: DateTime.now().toString(),
+    //     title: 'New Shoes',
+    //     amount: 74.99,
+    //     date: DateTime.now()),
+    // Transaction(
+    //   id: DateTime.now().toString(),
+    //   title: 'Groceries',
+    //   amount: 26.47,
+    //   date: DateTime.now(),
+    // ),
+    // Transaction(
+    //   id: DateTime.now().toString(),
+    //   title: 'Rent',
+    //   amount: 450,
+    //   date: DateTime.now(),
+    // ),
+    // Transaction(
+    //     id: DateTime.now().toString(),
+    //     title: 'New Pants',
+    //     amount: 69.99,
+    //     date: DateTime.now()),
+    // Transaction(
+    //   id: DateTime.now().toString(),
+    //   title: 'Groceries',
+    //   amount: 16.58,
+    //   date: DateTime.now(),
+    // ),
+    // Transaction(
+    //   id: DateTime.now().toString(),
+    //   title: 'Utilities',
+    //   amount: 120,
+    //   date: DateTime.now(),
+    // ),
+    // Transaction(
+    //     id: DateTime.now().toString(),
+    //     title: 'New Shoes',
+    //     amount: 74.99,
+    //     date: DateTime.now()),
+    // Transaction(
+    //   id: DateTime.now().toString(),
+    //   title: 'Groceries',
+    //   amount: 26.47,
+    //   date: DateTime.now(),
+    // ),
+    // Transaction(
+    //   id: DateTime.now().toString(),
+    //   title: 'Rent',
+    //   amount: 450,
+    //   date: DateTime.now(),
+    // ),
+    // Transaction(
+    //     id: DateTime.now().toString(),
+    //     title: 'New Pants',
+    //     amount: 69.99,
+    //     date: DateTime.now()),
+    // Transaction(
+    //   id: DateTime.now().toString(),
+    //   title: 'Groceries',
+    //   amount: 16.58,
+    //   date: DateTime.now(),
+    // ),
+    // Transaction(
+    //   id: DateTime.now().toString(),
+    //   title: 'Utilities',
+    //   amount: 120,
+    //   date: DateTime.now(),
+    // ),
   ];
   bool _showChart = false;
 
