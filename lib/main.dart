@@ -26,7 +26,12 @@ class MyApp extends StatelessWidget {
         },
         child: const CupertinoApp(
           debugShowCheckedModeBanner: false,
-          theme: CupertinoThemeData(brightness: Brightness.light),
+          theme: CupertinoThemeData(
+            brightness: Brightness.light,
+            textTheme: CupertinoTextThemeData(
+              textStyle: TextStyle(fontFamily: 'SF'),
+            ),
+          ),
           localizationsDelegates: [
             DefaultMaterialLocalizations.delegate,
           ],
