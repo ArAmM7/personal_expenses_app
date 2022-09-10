@@ -25,14 +25,13 @@ class MyApp extends StatelessWidget {
           }
         },
         child: const CupertinoApp(
+          debugShowCheckedModeBanner: false,
           theme: CupertinoThemeData(brightness: Brightness.light),
           localizationsDelegates: [
             DefaultMaterialLocalizations.delegate,
           ],
           title: 'Personal Expenses',
-          home: SelectionArea(
-            child: MyHomePage(),
-          ),
+          home: MyHomePage(),
         ));
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../models/transaction.dart';
@@ -36,52 +37,75 @@ class TransactionList extends StatelessWidget {
               ],
             );
           })
-        : SingleChildScrollView(
-            child: CupertinoFormSection(
-              clipBehavior: Clip.antiAlias,
-              children: transactions.map((e) {
-                return CupertinoFormRow(
-                  prefix: Row(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            color: CupertinoColors.systemYellow,
-                            borderRadius: BorderRadius.circular(12.0)),
-                        width: 80,
+        : SelectionArea(
+            child: SingleChildScrollView(
+              child: CupertinoFormSection(
+                clipBehavior: Clip.antiAlias,
+                children: transactions.map((e) {
+                  return Dismissible(
+                    direction: DismissDirection.endToStart,
+                    background: Container(
+                      padding: const EdgeInsets.all(4),
+                      alignment: Alignment.centerRight,
+                      color: CupertinoColors.destructiveRed,
+                      child: SizedBox(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: const [
+                            Icon(CupertinoIcons.delete_solid,
+                                color: CupertinoColors.white),
+                            Text(
+                              'Delete',
+                              style: TextStyle(color: CupertinoColors.white),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    onDismissed: (dir) {
+                      if (dir == DismissDirection.endToStart) {
+                        deleteTX(e.id);
+                      }
+                    },
+                    key: Key(e.id),
+                    child: CupertinoFormRow(
+                      prefix: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 24, left: 0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.5,
+                                  child: Text(e.title, style: const TextStyle(fontWeight: FontWeight.w500)),
+                                ),
+                                Text(
+                                  DateFormat('dd/MMM/yyyy').format(e.date),style: const TextStyle(color: CupertinoColors.inactiveGray),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        width: 144,
                         height: 40,
                         padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 5),
+                            vertical: 10, horizontal: 12),
                         child: FittedBox(
                           child: Text(
                             '\$${e.amount}',
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 24),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(width: MediaQuery.of(context).size.width*0.5,child: Text(e.title),),
-                              Text(
-                                DateFormat('dd/MMM/yyyy').format(e.date),
-                              )
-                            ]),
-                      ),
-                      CupertinoButton(
-                        onPressed: () => deleteTX(e.id),
-                        child: const Icon(CupertinoIcons.delete),
-                      ),
-                    ],
-                  ),
-                );
-              }).toList(),
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
           );
   }

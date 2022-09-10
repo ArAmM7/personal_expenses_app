@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:personal_expenses_app/models/transaction.dart';
 import 'package:intl/intl.dart';
 import 'package:personal_expenses_app/widgets/chart_bar.dart';
@@ -36,24 +36,26 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        margin: const EdgeInsets.all(6),
-        child: Padding(
-          padding: const EdgeInsets.all(2),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            ...groupedTransactionValues.map((data) {
-              return Flexible(
-                fit: FlexFit.tight,
-                child: ChartBar(
-                    label: data['day'].toString(),
-                    spendingAmount: (data['amount'] as double),
-                    spendingPctOfTotal: totalSpending == 0
-                        ? 0.0
-                        : (data['amount'] as double) / totalSpending),
-              );
-            }).toList()
-          ]),
-        ));
+    return SelectionArea(
+      child: Container(
+          margin: const EdgeInsets.all(6),
+          child: Padding(
+            padding: const EdgeInsets.all(2),
+            child:
+                Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              ...groupedTransactionValues.map((data) {
+                return Flexible(
+                  fit: FlexFit.tight,
+                  child: ChartBar(
+                      label: data['day'].toString(),
+                      spendingAmount: (data['amount'] as double),
+                      spendingPctOfTotal: totalSpending == 0
+                          ? 0.0
+                          : (data['amount'] as double) / totalSpending),
+                );
+              }).toList()
+            ]),
+          )),
+    );
   }
 }
