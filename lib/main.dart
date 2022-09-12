@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:personal_expenses_app/models/transaction.dart';
@@ -29,9 +28,12 @@ class MyApp extends StatelessWidget {
           theme: CupertinoThemeData(
             brightness: Brightness.light,
             textTheme: CupertinoTextThemeData(
-              dateTimePickerTextStyle: TextStyle(fontFamily: 'SF', fontSize: 12),
-              navTitleTextStyle:
-                  TextStyle(fontFamily: 'SF', color: CupertinoColors.label, fontWeight: FontWeight.w600),
+              dateTimePickerTextStyle:
+                  TextStyle(fontFamily: 'SF', fontSize: 12),
+              navTitleTextStyle: TextStyle(
+                  fontFamily: 'SF',
+                  color: CupertinoColors.label,
+                  fontWeight: FontWeight.w600),
               textStyle:
                   TextStyle(fontFamily: 'SF', color: CupertinoColors.label),
             ),
@@ -52,79 +54,83 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   List<Transaction> transactions = [];
 
   final List<Transaction> _userTransactions = [
-    //    dummy data
-    // Transaction(
-    //     id: DateTime.now().toString(),
-    //     title: 'New Shoes',
-    //     amount: 74.99,
-    //     date: DateTime.now()),
-    // Transaction(
-    //   id: DateTime.now().toString(),
-    //   title: 'Groceries',
-    //   amount: 26.47,
-    //   date: DateTime.now(),
-    // ),
-    // Transaction(
-    //   id: DateTime.now().toString(),
-    //   title: 'Rent',
-    //   amount: 450,
-    //   date: DateTime.now(),
-    // ),
-    // Transaction(
-    //     id: DateTime.now().toString(),
-    //     title: 'New Pants',
-    //     amount: 69.99,
-    //     date: DateTime.now()),
-    // Transaction(
-    //   id: DateTime.now().toString(),
-    //   title: 'Groceries',
-    //   amount: 16.58,
-    //   date: DateTime.now(),
-    // ),
-    // Transaction(
-    //   id: DateTime.now().toString(),
-    //   title: 'Utilities',
-    //   amount: 120,
-    //   date: DateTime.now(),
-    // ),
-    // Transaction(
-    //     id: DateTime.now().toString(),
-    //     title: 'New Shoes',
-    //     amount: 74.99,
-    //     date: DateTime.now()),
-    // Transaction(
-    //   id: DateTime.now().toString(),
-    //   title: 'Groceries',
-    //   amount: 26.47,
-    //   date: DateTime.now(),
-    // ),
-    // Transaction(
-    //   id: DateTime.now().toString(),
-    //   title: 'Rent',
-    //   amount: 450,
-    //   date: DateTime.now(),
-    // ),
-    // Transaction(
-    //     id: DateTime.now().toString(),
-    //     title: 'New Pants',
-    //     amount: 69.99,
-    //     date: DateTime.now()),
-    // Transaction(
-    //   id: DateTime.now().toString(),
-    //   title: 'Groceries',
-    //   amount: 16.58,
-    //   date: DateTime.now(),
-    // ),
-    // Transaction(
-    //   id: DateTime.now().toString(),
-    //   title: 'Utilities',
-    //   amount: 120,
-    //   date: DateTime.now(),
-    // ),
+    //dummy data
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'New Shoes',
+        amount: 74.99,
+        date: DateTime.now(),
+        categoryOfTransaction: CategoryOfTransaction.wants),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'Groceries',
+        amount: 26.47,
+        date: DateTime.now(),
+        categoryOfTransaction: CategoryOfTransaction.needs),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'Rent',
+        amount: 450,
+        date: DateTime.now(),
+        categoryOfTransaction: CategoryOfTransaction.needs),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'New Pants',
+        amount: 69.99,
+        date: DateTime.now(),
+        categoryOfTransaction: CategoryOfTransaction.wants),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'Groceries',
+        amount: 16.58,
+        date: DateTime.now(),
+        categoryOfTransaction: CategoryOfTransaction.needs),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'Utilities',
+        amount: 120,
+        date: DateTime.now(),
+        categoryOfTransaction: CategoryOfTransaction.needs),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'New Shoes',
+        amount: 74.99,
+        date: DateTime.now(),
+        categoryOfTransaction: CategoryOfTransaction.wants),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'Groceries',
+        amount: 26.47,
+        date: DateTime.now(),
+        categoryOfTransaction: CategoryOfTransaction.needs),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'Rent',
+        amount: 450,
+        date: DateTime.now(),
+        categoryOfTransaction: CategoryOfTransaction.needs),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'New Pants',
+        amount: 69.99,
+        date: DateTime.now(),
+        categoryOfTransaction: CategoryOfTransaction.wants),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'Groceries',
+        amount: 16.58,
+        date: DateTime.now(),
+        categoryOfTransaction: CategoryOfTransaction.needs),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'Utilities',
+        amount: 120,
+        date: DateTime.now(),
+        categoryOfTransaction: CategoryOfTransaction.needs),
   ];
   bool _showChart = false;
 
@@ -152,46 +158,9 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Column(
         children: <Widget>[
           if (!isLandscape)
-            Container(
-                height: availableHeight * 0.25,
-                alignment: Alignment.center,
-                width: double.infinity,
-                child: Chart(_recentTransactions.toList())),
-          if (!isLandscape) transactionList,
+            ..._buildPortraitContent(availableHeight, transactionList),
           if (isLandscape)
-            SizedBox(
-              height: availableHeight * 0.15,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CupertinoSlidingSegmentedControl(
-                    groupValue: _showChart,
-                    onValueChanged: (value) {
-                      setState(() {
-                        _showChart = value!;
-                      });
-                    },
-                    children: const <bool, Widget>{
-                      false: Text("Chart"),
-                      true: Text("Transactions"),
-                    },
-                  ),
-                ],
-              ),
-            ),
-          if (isLandscape)
-            _showChart
-                ? Container(
-                    height: availableHeight * 0.75,
-                    alignment: Alignment.center,
-                    width: double.infinity,
-                    child: transactionList)
-                : Container(
-                    height: availableHeight * 0.75,
-                    alignment: Alignment.center,
-                    width: double.infinity,
-                    child: Chart(_recentTransactions.toList()))
+            ..._buildLandscapeContent(availableHeight, transactionList),
         ],
       ),
     );
@@ -216,8 +185,10 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _addNewTransaction(String title, double amount, DateTime date) {
+  void _addNewTransaction(String title, double amount, DateTime date,
+      CategoryOfTransaction category) {
     final newTX = Transaction(
+        categoryOfTransaction: category,
         title: title,
         amount: amount,
         date: date,
@@ -231,5 +202,67 @@ class _MyHomePageState extends State<MyHomePage> {
   void _deleteTransaction(String id) {
     setState(
         () => _userTransactions.removeWhere((element) => element.id == id));
+  }
+
+  List<Widget> _buildLandscapeContent(
+      double availableHeight, SizedBox transactionList) {
+    return [
+      SizedBox(
+        height: availableHeight * 0.15,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CupertinoSlidingSegmentedControl(
+              groupValue: _showChart,
+              onValueChanged: (value) {
+                setState(() {
+                  _showChart = value!;
+                });
+              },
+              children: const <bool, Widget>{
+                false: Text("Chart"),
+                true: Text("Transactions")
+              },
+            ),
+          ],
+        ),
+      ),
+      _showChart
+          ? Container(
+              height: availableHeight * 0.75,
+              alignment: Alignment.center,
+              width: double.infinity,
+              child: transactionList)
+          : Container(
+              height: availableHeight * 0.75,
+              alignment: Alignment.center,
+              width: double.infinity,
+              child: Chart(_recentTransactions.toList()))
+    ];
+  }
+
+  List<Widget> _buildPortraitContent(
+      double availableHeight, SizedBox transactionList) {
+    return [
+      Container(
+          height: availableHeight * 0.25,
+          alignment: Alignment.center,
+          width: double.infinity,
+          child: Chart(_recentTransactions.toList())),
+      transactionList
+    ];
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 }
