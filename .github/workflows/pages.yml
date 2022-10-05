@@ -1,4 +1,4 @@
-name: Gh-Pages
+name: Github-Pages
 
 on:
   push:
@@ -6,11 +6,13 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v2 # Only works with v2
-      - uses: subosito/flutter-action@v1
-      - uses: bluefireteam/flutter-gh-pages@v7
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - uses: bluefireteam/flutter-gh-pages@v8
         with:
           baseHref: /personal_expenses_app/

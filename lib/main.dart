@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:personal_expenses_app/models/transaction.dart';
@@ -8,7 +12,12 @@ import 'package:personal_expenses_app/widgets/transaction_list.dart';
 import 'package:personal_expenses_app/widgets/chart.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    DevicePreview(
+      enabled: kIsWeb || Platform.isWindows || Platform.isMacOS || Platform.isLinux,
+      builder: (context) => const MyApp(), // Wrap your app
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -17,33 +26,31 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () {
-          FocusScopeNode currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
-        },
-        child: const CupertinoApp(
-          debugShowCheckedModeBanner: false,
-          theme: CupertinoThemeData(
-            brightness: Brightness.light,
-            textTheme: CupertinoTextThemeData(
-              dateTimePickerTextStyle:
-                  TextStyle(fontFamily: 'SF', fontSize: 12),
-              navTitleTextStyle: TextStyle(
-                  fontFamily: 'SF',
-                  color: CupertinoColors.label,
-                  fontWeight: FontWeight.w600),
-              textStyle:
-                  TextStyle(fontFamily: 'SF', color: CupertinoColors.label),
-            ),
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: CupertinoApp(
+        useInheritedMediaQuery: true,
+        locale: DevicePreview.locale(context),
+        theme: const CupertinoThemeData(
+          brightness: Brightness.light,
+          textTheme: CupertinoTextThemeData(
+            dateTimePickerTextStyle: TextStyle(fontFamily: 'SF', fontSize: 12),
+            navTitleTextStyle: TextStyle(
+                fontFamily: 'SF', color: CupertinoColors.label, fontWeight: FontWeight.w600),
+            textStyle: TextStyle(fontFamily: 'SF', color: CupertinoColors.label),
           ),
-          localizationsDelegates: [
-            DefaultMaterialLocalizations.delegate,
-          ],
-          title: 'Personal Expenses',
-          home: MyHomePage(),
-        ));
+        ),
+        localizationsDelegates: const [
+          DefaultMaterialLocalizations.delegate,
+        ],
+        title: 'Personal Expenses',
+        home: const MyHomePage(),
+      ),
+    );
   }
 }
 
@@ -139,28 +146,23 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     final appBar = CupertinoNavigationBar(
       middle: const Text('Personal Expenses'),
       trailing: GestureDetector(
-          onTap: () => {_startAddNewTransaction(context)},
-          child: const Icon(CupertinoIcons.add)),
+          onTap: () => {_startAddNewTransaction(context)}, child: const Icon(CupertinoIcons.add)),
     );
 
     final mediaQuery = MediaQuery.of(context);
     final isLandscape = mediaQuery.orientation == Orientation.landscape;
-    final availableHeight = (mediaQuery.size.height -
-        mediaQuery.padding.top -
-        appBar.preferredSize.height);
+    final availableHeight =
+        (mediaQuery.size.height - mediaQuery.padding.top - appBar.preferredSize.height);
     final transactionList = SizedBox(
       height: availableHeight * 0.75,
-      child: TransactionList(
-          transactions: _userTransactions, deleteTX: _deleteTransaction),
+      child: TransactionList(transactions: _userTransactions, deleteTX: _deleteTransaction),
     );
 
     final pageBody = SafeArea(
       child: Column(
         children: <Widget>[
-          if (!isLandscape)
-            ..._buildPortraitContent(availableHeight, transactionList),
-          if (isLandscape)
-            ..._buildLandscapeContent(availableHeight, transactionList),
+          if (!isLandscape) ..._buildPortraitContent(availableHeight, transactionList),
+          if (isLandscape) ..._buildLandscapeContent(availableHeight, transactionList),
         ],
       ),
     );
@@ -172,8 +174,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   }
 
   Iterable<Transaction> get _recentTransactions {
-    return _userTransactions.where((element) =>
-        element.date.isAfter(DateTime.now().subtract(const Duration(days: 7))));
+    return _userTransactions
+        .where((element) => element.date.isAfter(DateTime.now().subtract(const Duration(days: 7))));
   }
 
   void _startAddNewTransaction(BuildContext context) {
@@ -185,8 +187,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     );
   }
 
-  void _addNewTransaction(String title, double amount, DateTime date,
-      CategoryOfTransaction category) {
+  void _addNewTransaction(
+      String title, double amount, DateTime date, CategoryOfTransaction category) {
     final newTX = Transaction(
         categoryOfTransaction: category,
         title: title,
@@ -200,12 +202,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   }
 
   void _deleteTransaction(String id) {
-    setState(
-        () => _userTransactions.removeWhere((element) => element.id == id));
+    setState(() => _userTransactions.removeWhere((element) => element.id == id));
   }
 
-  List<Widget> _buildLandscapeContent(
-      double availableHeight, SizedBox transactionList) {
+  List<Widget> _buildLandscapeContent(double availableHeight, SizedBox transactionList) {
     return [
       SizedBox(
         height: availableHeight * 0.15,
@@ -220,10 +220,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                   _showChart = value!;
                 });
               },
-              children: const <bool, Widget>{
-                false: Text("Chart"),
-                true: Text("Transactions")
-              },
+              children: const <bool, Widget>{false: Text("Chart"), true: Text("Transactions")},
             ),
           ],
         ),
@@ -242,8 +239,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     ];
   }
 
-  List<Widget> _buildPortraitContent(
-      double availableHeight, SizedBox transactionList) {
+  List<Widget> _buildPortraitContent(double availableHeight, SizedBox transactionList) {
     return [
       Container(
           height: availableHeight * 0.25,
